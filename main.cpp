@@ -1,24 +1,7 @@
 #include <iostream>
+#include FinalProjectHeader.h
 
 using namespace std;
-
-struct person{  // define the UDT 
-    
-    string pName;
-    long pSSN; 
-
-    char gender; 
-    string DOB;
-    
-    float height; 
-    float weight;
-    
-    long fSSN;
-    long mSSN;
-    
-
-    person* next;
-};
 
 int getData(person* head, string fMovStar);
 int displayData(person*head, string fMovStar);
