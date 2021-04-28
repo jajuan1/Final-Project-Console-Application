@@ -1,5 +1,7 @@
 #include <iostream>
 
+using namespace std;
+
 struct person{  // define the UDT 
     
     string pName;
