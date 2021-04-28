@@ -18,6 +18,9 @@ struct person{  // define the UDT
     person* next;
 };
 
+int getData(person* head, string fMovStar);
+int displayData(person*head, string fMovStar);
+
 int main()
 {
    person* head = new person; // independent person 
@@ -30,6 +33,13 @@ int main()
     ifstream fMovStar;
     fMovStar.open("persondata.txt"); 
     
+    displayData(head, fMovStar);
+ 
+  return 0;
+}
+
+int getData(person* head, string fMovStar)
+{
     while (!fMovStar.eof())
     {
         getline( fMovStar, fLine); 
@@ -53,8 +63,28 @@ int main()
         current->next = newPerson; // linking persons 
         current = newPerson; 
     }
-    
-    fMovStar.close(); 
- 
-  return 0;
+    fMovStar.close();
 }
+
+int displayData(person*head, string fMovStar)
+{
+    getData(head, fMovStar);
+    
+    // display 
+    while (current != NULL){
+        cout << current->pname << " | " 
+             << current->SSN << " | " 
+             << current->gender << " | " 
+             << current->DOB << " | " 
+             << current->height << " | " 
+             << current->weight << " | " 
+             << current->fName << " | "  
+             << current->mName << " | " <<  endl ;
+        current = current->next; 
+    }
+
+    current = head; 
+    cout << endl; 
+ 
+    return 0;
+|
