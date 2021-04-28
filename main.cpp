@@ -51,7 +51,7 @@ int getData(person* head, string fMovStar)
     fMovStar.close();
 }
 
-int displayData(person*head, string fMovStar)
+int displayData(person* head, string fMovStar)
 {
     getData(head, fMovStar);
     
