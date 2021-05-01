@@ -1,3 +1,8 @@
+/******************************************************************************
+Evan
+04/30/21
+Final project skeleton
+*******************************************************************************/
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -7,19 +12,19 @@ using namespace std;
 // Struct declaration
 
 struct Person{  
-
+    
     string personName,
            personDOB;
-
+           
     long personSSN,
          fatherSSN,
          motherSSN;
-
+    
     char personGender;
-
+    
     float personHeight,
           personWeight;
-
+    
     Person* next;                                         
 };
 
@@ -58,36 +63,68 @@ Person* option_twelve(Person*);
 
 void show_goodbyeMsg();
 
+Person* createPerson_Nodes(); 
+
+void printPerson_Nodes(Person* const); 
+
 // End function prototypes
 
 // Driver
 int main() {
-
+    
     // Hello
     show_welcomeMsg();
-
+    
     // Initialize struct
-    Person* head = new Person;
+    Person* head;
+    
+    head = createPerson_Nodes();
 
-    head -> next = NULL;
-
+    // maintain the origninal head address 
     Person* current = head;
 
-    bool quit = false;                                      // Control flow
-
+    printPerson_Nodes(current);
+    
+   bool quit = false;// Control flow
+    
     // Main menu loop
     while (quit == false && cin) {
-
+        
         quit = menu_loop(quit, head);                       //  Exit on flag
     }
-
+    
     // Goodbye
     show_goodbyeMsg();
-
+    
     return 0;
 }    
 
 // Function definitions
+
+// Print person Nodes
+// Parameters: Pointer to head of person struct
+// Returns: Void
+void printPerson_Nodes(Person* const head)
+{
+        Person* current = head;
+
+      while(current->next)
+    {
+        std::cout<< current-> personName << " | ";
+        std::cout<< current-> personSSN << " | ";
+        std::cout<< current-> personGender << " | ";
+        std::cout<< current-> personDOB << " | ";
+        std::cout<< current-> personHeight << " | ";
+        std::cout<< current-> personWeight << " | ";
+        std::cout<< current-> fatherSSN << " | ";
+        std::cout<< current-> motherSSN << " | ";
+        std::cout<< '\n';
+        
+        current = current->next;
+    } 
+        std::cout<< endl;
+} 
+
 
 // Welcome
 // Parameters: None
@@ -101,11 +138,11 @@ void show_welcomeMsg() {
 // Parameters: none
 // Returns: Int
 int user_input() {
-
+    
     int inp = 0;
-
+    
     while (cin >> inp) {
-
+        
         return inp;
     } 
 }
@@ -114,11 +151,11 @@ int user_input() {
 // Parameters: Bool, pointer to head of person struct
 // Returns: Bool
 bool menu_loop(bool quit, Person* head) {
-
+    
     int choice = 0;
-
+    
     bool dontquitMenu = true;
-
+    
     cout << "Please listen carefully, as our menu options have recently "
          << "changed: " << endl; // :D
     cout << "1: " << endl;
@@ -133,16 +170,16 @@ bool menu_loop(bool quit, Person* head) {
     cout << "10: " << endl;
     cout << "11: " << endl;
     cout << "12: " << endl;
-
+         
     while (cin && dontquitMenu == true) {
-
+        
         cout << "Enter option 1-12, or enter -1 to show menu again. "
             << "Enter anything else to exit." << endl;    
-
+        
         choice = user_input(); 
-
+    
         switch (choice) {
-
+        
             case -1:
 
             cout << "Menu options: " << endl;
@@ -158,124 +195,184 @@ bool menu_loop(bool quit, Person* head) {
             cout << "10: " << endl;
             cout << "11: " << endl;
             cout << "12: " << endl;
-
+            
             break;
-
+            
             case 1:
-
+            
                 cout << "Option 1" << endl;
-
+            
                 head = option_one(head);
-
+            
                 break;
-
+        
             case 2:
-
+            
                 cout << "Option 2" << endl;
-
+            
                 head = option_two(head);
-
+            
                 break;
-
+        
             case 3:
-
+            
                 cout << "Option 3" << endl;
-
+            
                 head = option_three(head);
-
+            
                 break;
-
+        
             case 4:
-
+            
                 cout << "Option 4" << endl;
-
+            
                 head = option_four(head);
-
+            
                 break;
-
+        
             case 5:
-
+            
                 cout << "Option 5" << endl;
-
+            
                 head = option_five(head); 
-
+            
                 break;
-
+        
             case 6:
-
+            
                 cout << "Option 6" << endl;
-
+            
                 head = option_six(head);
-
+            
                 break;
-
+        
             case 7:
-
+            
                 cout << "Option 7" << endl;
-
+            
                 head = option_seven(head);
-
+            
                 break;
-
+            
             case 8:
-
+            
                 cout << "Option 8" << endl;
-
+            
                 head = option_eight(head);
-
+            
                 break;
-
+            
             case 9:
-
+            
                 cout << "Option 9" << endl;
-
+            
                 head = option_nine(head);
-
+            
                 break;
-
+            
             case 10:
-
+            
                 cout << "Option 10" << endl;
-
+            
                 head = option_ten(head);
-
+            
                 break;
-
+            
             case 11:
-
+            
                 cout << "Option 11" << endl;
-
+            
                 head = option_eleven(head);
-
+            
                 break;
-
+            
             case 12:
-
+            
                 cout << "Option 12" << endl;
-
+            
                 head = option_twelve(head);
-
+            
                 break;
 
             default:
-
+            
                 cout << "Terminating" << endl;
-
+            
                 return dontquitMenu;
         }
-
+    
     }
     return dontquitMenu;
 }    
+
+
+// Create Linked List of Person Nodes.
+// Parameters: None
+// Returns: Pointer to head of person struct created
+Person* createPerson_Nodes(){ 
+	
+    Person* head = new Person;
+    head -> next = NULL;
+    Person* current = head;
+
+    // Access file contents
+    string person_data{""};
+    ifstream personFile;
+
+    personFile.open("supplement.txt");
+
+    while(!personFile.eof())
+    {
+        //get person Name from file
+        getline(personFile, person_data);
+        current->personName = person_data;
+
+        //get person SSN from file
+        getline(personFile, person_data);
+        current->personSSN = stol(person_data);
+
+        //get person Gender from file
+        getline(personFile, person_data);
+        current->personGender = person_data[0];
+
+        //get person DOB from file
+        getline(personFile, person_data);
+        current->personDOB = person_data;
+
+        //get person Height from file
+        getline(personFile, person_data);
+        current->personHeight = stof(person_data);
+
+        //get person Weight from file
+        getline(personFile, person_data);
+        current->personWeight = stof(person_data);
+
+        //get person father SSN from file
+        getline(personFile, person_data);
+        current->fatherSSN = stol(person_data);
+
+         //get person mother SSN from file
+        getline(personFile, person_data);
+        current->motherSSN = stol(person_data);
+
+       
+        current-> next = new Person; // new node is allocated on the heap.
+        current = current-> next; // point to the previous allocated node.
+    }
+        // Free the memory of the last Person Node due to the last iteration creating a unneeded Person Node.
+        delete current-> next;
+
+        return head;
+}
 
 
 // Option 1
 // Parameters: Pointer to head of person struct
 // Returns: Pointer to head of person struct
 Person* option_one(Person* head) {
-
+    
     cout << "Fnct 1" << endl;
-
+    
     return head;
 }
 
@@ -283,9 +380,9 @@ Person* option_one(Person* head) {
 // Parameters: Pointer to head of person struct
 // Returns: Pointer to head of person struct
 Person* option_two(Person* head) {
-
+    
     cout << "Fnct 2" << endl;
-
+    
     return head;
 }
 
@@ -293,9 +390,9 @@ Person* option_two(Person* head) {
 // Parameters: Pointer to head of person struct
 // Returns: Pointer to head of person struct
 Person* option_three(Person* head) {
-
+    
     cout << "Fnct 3" << endl;
-
+    
     return head;
 }
 
@@ -303,9 +400,9 @@ Person* option_three(Person* head) {
 // Parameters: Pointer to head of person struct
 // Returns: Pointer to head of person struct
 Person* option_four(Person* head) {
-
+    
     cout << "Fnct 4" << endl;
-
+    
     return head;
 }
 
@@ -313,9 +410,9 @@ Person* option_four(Person* head) {
 // Parameters: Pointer to head of person struct
 // Returns: Pointer to head of person struct
 Person* option_five(Person* head) {
-
+    
     cout << "Fnct 5" << endl;
-
+    
     return head;
 }
 
@@ -323,9 +420,9 @@ Person* option_five(Person* head) {
 // Parameters: Pointer to head of person struct
 // Returns: Pointer to head of person struct
 Person* option_six(Person* head) {
-
+    
     cout << "Fnct 6" << endl;
-
+    
     return head;
 }
 
@@ -333,9 +430,9 @@ Person* option_six(Person* head) {
 // Parameters: Pointer to head of person struct
 // Returns: Pointer to head of person struct
 Person* option_seven(Person* head) {
-
+    
     cout << "Fnct 7" << endl;
-
+    
     return head;
 }
 
@@ -343,9 +440,9 @@ Person* option_seven(Person* head) {
 // Parameters: Pointer to head of person struct
 // Returns: Pointer to head of person struct
 Person* option_eight(Person* head) {
-
+    
     cout << "Fnct 8" << endl;
-
+    
     return head;
 }
 
@@ -353,9 +450,9 @@ Person* option_eight(Person* head) {
 // Parameters: Pointer to head of person struct
 // Returns: Pointer to head of person struct
 Person* option_nine(Person* head) {
-
+    
     cout << "Fnct 9" << endl;
-
+    
     return head;
 }
 
@@ -363,9 +460,9 @@ Person* option_nine(Person* head) {
 // Parameters: Pointer to head of person struct
 // Returns: Pointer to head of person struct
 Person* option_ten(Person* head) {
-
+    
     cout << "Fnct 10" << endl;
-
+    
     return head;
 }
 
@@ -373,9 +470,9 @@ Person* option_ten(Person* head) {
 // Parameters: Pointer to head of person struct
 // Returns: Pointer to head of person struct
 Person* option_eleven(Person* head) {
-
+    
     cout << "Fnct 11" << endl;
-
+    
     return head;
 }
 
@@ -383,9 +480,9 @@ Person* option_eleven(Person* head) {
 // Parameters: Pointer to head of person struct
 // Returns: Pointer to head of person struct
 Person* option_twelve(Person* head) {
-
+    
     cout << "Fnct 12" << endl;
-
+    
     return head;
 }
 
