@@ -39,7 +39,7 @@ bool menu_loop(bool, Person*);
 
 Person* option_one(Person*);
 
-Person* option_two(Person*);
+Person* option_two(Person**, Person*);
 
 Person* option_three(Person*);
 
@@ -66,6 +66,8 @@ void show_goodbyeMsg();
 Person* createPerson_Nodes(); 
 
 void printPerson_Nodes(Person* const); 
+
+Person* delete_Person(Person** head);
 
 // End function prototypes
 
@@ -108,10 +110,14 @@ void printPerson_Nodes(Person* const head)
 {
         Person* current = head;
 
-      while(current->next)
+
+          while(current->next)
     {
-        std::cout<< current-> personName << " | ";
-        std::cout<< current-> personSSN << " | ";
+        
+     
+        cout << current -> personName << " | "; 
+        cout<< current -> personSSN << " | ";
+        
         std::cout<< current-> personGender << " | ";
         std::cout<< current-> personDOB << " | ";
         std::cout<< current-> personHeight << " | ";
@@ -121,6 +127,7 @@ void printPerson_Nodes(Person* const head)
         std::cout<< '\n';
         
         current = current->next;
+        
     } 
         std::cout<< endl;
 } 
@@ -147,6 +154,63 @@ int user_input() {
     } 
 }
 
+
+// Delete person from list, with user input SSN as key
+Person* delete_Person(Person** head) {
+    
+    bool keyFound = false;
+    
+    string currentLine;
+    
+    cin.ignore();
+
+    cout << "Enter the SSN of the person to be deleted: " << endl;
+    
+
+    getline(cin, currentLine);
+    
+    long key = stol(currentLine);
+    
+    Person* temp = *head;
+    
+    Person* prev = NULL;
+    
+    if (temp != NULL && temp -> personSSN == key) {
+
+        *head = temp -> next;
+        
+        delete temp;
+        
+    } else {
+        
+        while (temp != NULL && temp -> personSSN != key) {
+            
+            prev = temp;
+            
+            temp = temp -> next;
+            
+            keyFound = true;
+        }
+    }
+    
+    if (temp == NULL) {
+        
+        cout << "Indicated SSN not found!" << endl;
+        
+        keyFound = false;
+        
+        cin.ignore();
+        
+        return *head;
+    }    
+    
+    prev -> next = temp -> next;
+        
+    delete temp;
+    
+    return *head;
+}
+
 // Switchboard for menu options 
 // Parameters: Bool, pointer to head of person struct
 // Returns: Bool
@@ -154,12 +218,12 @@ bool menu_loop(bool quit, Person* head) {
     
     int choice = 0;
     
-    bool dontquitMenu = true;
+    bool dontQuitMenu = true;
     
     cout << "Please listen carefully, as our menu options have recently "
          << "changed: " << endl; // :D
     cout << "1: " << endl;
-    cout << "2: " << endl;
+    cout << "2: Deletion Operation" << endl;
     cout << "3: " << endl;
     cout << "4: " << endl;
     cout << "5: " << endl;
@@ -171,7 +235,7 @@ bool menu_loop(bool quit, Person* head) {
     cout << "11: " << endl;
     cout << "12: " << endl;
          
-    while (cin && dontquitMenu == true) {
+    while (cin && dontQuitMenu == true) {
         
         cout << "Enter option 1-12, or enter -1 to show menu again. "
             << "Enter anything else to exit." << endl;    
@@ -182,21 +246,21 @@ bool menu_loop(bool quit, Person* head) {
         
             case -1:
 
-            cout << "Menu options: " << endl;
-            cout << "1: " << endl;
-            cout << "2: " << endl;
-            cout << "3: " << endl;
-            cout << "4: " << endl;
-            cout << "5: " << endl;
-            cout << "6: " << endl;
-            cout << "7: " << endl;
-            cout << "8: " << endl;
-            cout << "9: " << endl;
-            cout << "10: " << endl;
-            cout << "11: " << endl;
-            cout << "12: " << endl;
+                cout << "Menu options: " << endl;
+                cout << "1: " << endl;
+                cout << "2: Deletion Operation" << endl;
+                cout << "3: " << endl;
+                cout << "4: " << endl;
+                cout << "5: " << endl;
+                cout << "6: " << endl;
+                cout << "7: " << endl;
+                cout << "8: " << endl;
+                cout << "9: " << endl;
+                cout << "10: " << endl;
+                cout << "11: " << endl;
+                cout << "12: " << endl;
             
-            break;
+                break;
             
             case 1:
             
@@ -208,9 +272,15 @@ bool menu_loop(bool quit, Person* head) {
         
             case 2:
             
-                cout << "Option 2" << endl;
-            
-                head = option_two(head);
+                cout << "Option 2: Deletion Operation" << endl;
+                
+                
+                printPerson_Nodes(head);
+                //head = option_two(head);
+                
+                head = delete_Person(&head);
+                
+                printPerson_Nodes(head);
             
                 break;
         
@@ -296,13 +366,13 @@ bool menu_loop(bool quit, Person* head) {
 
             default:
             
-                cout << "Terminating" << endl;
+                cout << "Terminating." << endl;
             
-                return dontquitMenu;
+                return dontQuitMenu;
         }
     
     }
-    return dontquitMenu;
+    return dontQuitMenu;
 }    
 
 
@@ -311,6 +381,7 @@ bool menu_loop(bool quit, Person* head) {
 // Returns: Pointer to head of person struct created
 Person* createPerson_Nodes(){ 
 	
+	Person* newPerson = new Person;       
     Person* head = new Person;
     head -> next = NULL;
     Person* current = head;
@@ -319,13 +390,15 @@ Person* createPerson_Nodes(){
     string person_data{""};
     ifstream personFile;
 
-    personFile.open("supplement.txt");
+    personFile.open("persondata.txt");
 
     while(!personFile.eof())
     {
         //get person Name from file
         getline(personFile, person_data);
         current->personName = person_data;
+        
+        cout << current->personName << endl;
 
         //get person SSN from file
         getline(personFile, person_data);
@@ -358,10 +431,20 @@ Person* createPerson_Nodes(){
        
         current-> next = new Person; // new node is allocated on the heap.
         current = current-> next; // point to the previous allocated node.
+        
+   
     }
+    
+   
+    
+    //current = head;
+    
+        personFile.close();
         // Free the memory of the last Person Node due to the last iteration creating a unneeded Person Node.
         delete current-> next;
-
+        
+        cout << head -> personSSN << endl;
+        
         return head;
 }
 
