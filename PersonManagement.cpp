@@ -319,7 +319,7 @@ Person* createPerson_Nodes(){
     string person_data{""};
     ifstream personFile;
 
-    personFile.open("supplement.txt");
+    personFile.open("persondata.txt");
 
     while(!personFile.eof())
     {
