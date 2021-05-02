@@ -1,0 +1,54 @@
+1. Display the persons (always in ascending order of SSN)
+
+    Whenever persons are displayed, all the details of the person have to appear on one line of output. 
+
+2. Prompt for removing a person (input SSN):
+
+Remove the specified person-node.
+Sort the new list by SSN increasing and display the persons. 
+
+3. Prompt for adding a person:
+
+Add a new person-node to the list (user provides the person data). 
+
+Sort the new list by SSN increasing and display the persons. 
+
+4. Add new people to the list in bulk by reading a supplementary file containing person data (at least 5 persons). 
+
+Create multiple new person-nodes as required. 
+
+Sort the new list by SSN increasing and display the persons. 
+
+5. Edit a person (user  specifies one SSN and enters new details of pname, height and weight for that SSN). 
+
+Display the single person before and after editing the data. 
+
+6. Display all persons eligible for social security (age 65 and older)
+
+   In increasing order of age. 
+
+7. Display all persons at high risk of cardiovascular disease (BMI 27 and higher) 
+
+     In decreasing order of BMI. 
+
+8. Display the male:female ratio of the population of the county (females per thousand males) 
+
+9. Find the parents of a person (user supplies SSN of the person). 
+
+     Display mother first, then father. 
+
+10. Find all children of a person (user supplies SSN of the person). 
+
+     In decreasing order of age (oldest first). 
+
+11. Find all siblings of a person (user supplies SSN of the person). 
+
+      In decreasing order of age (oldest first). 
+
+      (HINT: Find the parents of the person, then find all the children of each parent.) 
+
+12. Find all uncles, aunts, cousins, nephews and nieces of a person (user supplies SSN of the person). 
+
+       Group by generation, oldest first; display by age, oldest first. 
+
+       (HINT: Find the parents of the person, then find all the siblings of each parent, then find the children of each sibling.) 
