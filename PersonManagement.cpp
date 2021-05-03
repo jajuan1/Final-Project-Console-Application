@@ -69,6 +69,12 @@ void print_PersonNodes(Person*, Person*);
 
 void populate_Person(string, Person*, Person*, Person*);
 
+void edit_PersonData(Person*);
+
+void display_Eligibility(Person*);
+
+
+
 // End function prototypes
 
 // Driver
@@ -110,6 +116,85 @@ int main() {
 }    
 
 // Function definitions
+
+
+// Display all persons eligible for social security
+// Parameters: Pointer to head of person struct
+// Returns: Void
+void display_Eligibility(Person* head)
+{
+    Person* current{head};
+
+    std::cout<< "\nEligible for social security: \n";
+
+    while(current->next != NULL)
+    {
+        if( 2021 - stoi(current->personDOB.substr(0,4)) >= 65 )
+        {
+            std::cout<< current->personName << ": Age: " << 2021 - stoi(current->personDOB.substr(0,4)) << '\n';
+        }
+        
+        current = current->next;
+    }
+}
+
+// Edit Person  Name, Height and Weight for that SSN
+// Parameters: Pointer to head of person struct
+// Returns: Void
+void edit_PersonData(Person* head)
+{
+    Person* current{head};
+    
+    long targetSSN{0};
+    
+    string currentLine;
+    string newdata{""};
+    
+    cin.ignore();
+    
+    std::cout<< "Enter the SSN of the person to be edited: ";
+    getline(cin,currentLine);
+    
+    targetSSN = stol(currentLine);
+    
+    
+    while(current->next != NULL)
+    {
+        if(current->personSSN == targetSSN)
+        {
+            std::cout<< "SSN entered matches " << current->personName << '\n';
+            std::cout<< "Editing commenced. Press 0 to keep original data\n";
+            
+            std::cout<< "Enter new Name: ";    
+            getline(cin,newdata);
+            if(newdata[0] != '0')
+                current->personName = newdata;
+            else
+                std::cout<< "Retaining original data.\n";
+            
+            std::cout<< "Enter new Height: "; 
+            getline(cin,newdata);
+             if(newdata[0] != '0')
+                current->personHeight = stof(newdata);
+            else
+                std::cout<< "Retaining original data.\n";
+           
+            
+            std::cout<< "Enter new Weight: "; 
+            getline(cin,newdata);
+             if(newdata[0] != '0')
+                current->personWeight= stof(newdata);
+            else
+                std::cout<< "Retaining original data.\n";
+           
+        }
+        
+        current = current->next;
+    }
+    
+    std::cout<< "Editing Completed.\n";
+    
+}
 
 // Print person Nodes
 // Parameters: Pointer to head of person struct
@@ -240,8 +325,8 @@ bool menu_loop(bool quit, Person* head, Person* current) {
     cout << "2: Deletion Operation" << endl;
     cout << "3: " << endl;
     cout << "4: " << endl;
-    cout << "5: " << endl;
-    cout << "6: " << endl;
+    cout << "5: Edit Person Data" << endl;
+    cout << "6: Display all persons eligible for social security" << endl;
     cout << "7: " << endl;
     cout << "8: " << endl;
     cout << "9: " << endl;
@@ -265,8 +350,8 @@ bool menu_loop(bool quit, Person* head, Person* current) {
                 cout << "2: Deletion Operation" << endl;
                 cout << "3: " << endl;
                 cout << "4: " << endl;
-                cout << "5: " << endl;
-                cout << "6: " << endl;
+                cout << "5: Edit Person data" << endl;
+                cout << "6: Display all persons eligible for social security" << endl;
                 cout << "7: " << endl;
                 cout << "8: " << endl;
                 cout << "9: " << endl;
@@ -317,15 +402,19 @@ bool menu_loop(bool quit, Person* head, Person* current) {
             
                 cout << "Option 5" << endl;
             
-                head = option_five(head); 
+                print_PersonNodes(head, current);
+                
+                edit_PersonData(head); 
+                
+                print_PersonNodes(head, current);
             
                 break;
         
             case 6:
             
-                cout << "Option 6" << endl;
+                cout << "Display all persons eligible for social security" << endl;
             
-                head = option_six(head);
+                display_Eligibility(head);
             
                 break;
         
@@ -468,7 +557,6 @@ Person* option_one(Person* head) {
 Person* option_two(Person* head) {
     
     cout << "Fnct 2" << endl;
-
     return head;
 }
 */
