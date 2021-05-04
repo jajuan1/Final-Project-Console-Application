@@ -63,6 +63,8 @@ Person* option_twelve(Person*);
 
 void show_goodbyeMsg();
 
+float get_RBMI(int, int, person[]); 
+
 // End function prototypes
 
 // Driver
@@ -401,3 +403,14 @@ void show_goodbyeMsg() {
 	cout << endl << "Thank you for using the Person Struct Linked List " 
 	     << "Manager!" << endl;
 }
+
+float get_RBMI(int i, int j, person pArray[]) 
+{
+    
+    float wDiff = 1 + abs(pArray[i].weight - pArray[j].weight) * 0.45;
+    float hDiff = 1 + abs(pArray[i].height - pArray[j].height) * 0.254;
+    
+    float RBMI = wDiff / (pow(hDiff, 2));
+    
+    return RBMI;
+}    
