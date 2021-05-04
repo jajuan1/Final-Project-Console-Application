@@ -10,6 +10,7 @@ Final project skeleton
 using namespace std;
 
 // Struct declaration
+
 struct Person{  
     
     string personName,
@@ -26,7 +27,7 @@ struct Person{
     
     Person* next;                                         
 };
-// End struct declaration
+
 
 // Function prototypes
 
@@ -34,12 +35,11 @@ void show_welcomeMsg();
 
 int user_input();
 
-bool menu_loop(bool, Person*, Person*);
+bool menu_loop(bool, Person*);
 
 Person* option_one(Person*);
 
-//Person* option_two(Person**, Person*); Deprecated placeholder 
-Person* delete_Person(Person** head);
+Person* option_two(Person*);
 
 Person* option_three(Person*);
 
@@ -63,18 +63,6 @@ Person* option_twelve(Person*);
 
 void show_goodbyeMsg();
 
-//Person* createPerson_Nodes(); 
-
-void print_PersonNodes(Person*, Person*); 
-
-void populate_Person(string, Person*, Person*, Person*);
-
-void edit_PersonData(Person*);
-
-void display_Eligibility(Person*);
-
-
-
 // End function prototypes
 
 // Driver
@@ -83,30 +71,19 @@ int main() {
     // Hello
     show_welcomeMsg();
     
-    // Var declarations
-    bool quit = false;                  // Control flow
+    // Initialize struct
+    Person* head = new Person;
     
-    string fileName = "persondata.txt"; // Modularize filename for both file 
-                                        // function calls; initialize to file 1
-                                        // Change to "supplement.txt" in #4 call
-    
-    // End var declarations
-    
-    // Initialize Struct 
-    Person* head = new Person;  // Independent person
     head -> next = NULL;
     
     Person* current = head;
-    Person* newPerson;
-    // End Struct initialization
     
-    // Populate Struct w/ start file -- first "module" before calling menu
-    populate_Person(fileName, current, newPerson, head);
+    bool quit = false;                                      // Control flow
     
     // Main menu loop
     while (quit == false && cin) {
         
-        quit = menu_loop(quit, head, current);  //  Exit on flag
+        quit = menu_loop(quit, head);                       //  Exit on flag
     }
     
     // Goodbye
@@ -116,115 +93,6 @@ int main() {
 }    
 
 // Function definitions
-
-
-// Display all persons eligible for social security
-// Parameters: Pointer to head of person struct
-// Returns: Void
-void display_Eligibility(Person* head)
-{
-    Person* current{head};
-
-    std::cout<< "\nEligible for social security: \n";
-
-    while(current->next != NULL)
-    {
-        if( 2021 - stoi(current->personDOB.substr(0,4)) >= 65 )
-        {
-            std::cout<< current->personName << ": Age: " << 2021 - stoi(current->personDOB.substr(0,4)) << '\n';
-        }
-        
-        current = current->next;
-    }
-}
-
-// Edit Person  Name, Height and Weight for that SSN
-// Parameters: Pointer to head of person struct
-// Returns: Void
-void edit_PersonData(Person* head)
-{
-    Person* current{head};
-    
-    long targetSSN{0};
-    
-    string currentLine;
-    string newdata{""};
-    
-    cin.ignore();
-    
-    std::cout<< "Enter the SSN of the person to be edited: ";
-    getline(cin,currentLine);
-    
-    targetSSN = stol(currentLine);
-    
-    
-    while(current->next != NULL)
-    {
-        if(current->personSSN == targetSSN)
-        {
-            std::cout<< "SSN entered matches " << current->personName << '\n';
-            std::cout<< "Editing commenced. Press 0 to keep original data\n";
-            
-            std::cout<< "Enter new Name: ";    
-            getline(cin,newdata);
-            if(newdata[0] != '0')
-                current->personName = newdata;
-            else
-                std::cout<< "Retaining original data.\n";
-            
-            std::cout<< "Enter new Height: "; 
-            getline(cin,newdata);
-             if(newdata[0] != '0')
-                current->personHeight = stof(newdata);
-            else
-                std::cout<< "Retaining original data.\n";
-           
-            
-            std::cout<< "Enter new Weight: "; 
-            getline(cin,newdata);
-             if(newdata[0] != '0')
-                current->personWeight= stof(newdata);
-            else
-                std::cout<< "Retaining original data.\n";
-           
-        }
-        
-        current = current->next;
-    }
-    
-    std::cout<< "Editing Completed.\n";
-    
-}
-
-// Print person Nodes
-// Parameters: Pointer to head of person struct
-// Returns: Void
-void print_PersonNodes(Person* head, Person* current) {
-
-    current = head;
-    
-    cout << endl;
-
-    cout << "Here is the linked list of persons: " << endl << endl;
-
-    while (current != NULL) {
-        
-        cout << current -> personName << " | "
-             << current -> personSSN << " | "
-             << current -> personGender << " | "
-             << current -> personDOB << " | "
-             << current -> personHeight << " | "
-             << current -> personWeight << " | "
-             << current -> fatherSSN << " | "
-             << current -> motherSSN << " | "
-             << endl;
-        
-        current = current -> next;
-    }
-    
-    cout << endl; 
-} 
-
 
 // Welcome
 // Parameters: None
@@ -247,86 +115,23 @@ int user_input() {
     } 
 }
 
-
-// Delete person from list, with user input SSN as key
-// Parameters: Person** (Reference Person* -- call w/ &Person)
-// Returns: Person*
-Person* delete_Person(Person** head) {
-    
-    bool keyFound = false;
-    
-    string currentLine;
-    
-    cin.ignore();
-
-    cout << "Enter the SSN of the person to be deleted: " << endl;
-    
-    getline(cin, currentLine);
-    
-    long key = stol(currentLine);
-    
-    Person* temp = *head;
-    
-    Person* prev = NULL;
-    
-    if (temp != NULL && temp -> personSSN == key) {
-
-        *head = temp -> next;
-        
-        delete temp;
-        
-    } else {
-        
-        while (temp != NULL && temp -> personSSN != key) {
-            
-            prev = temp;
-            
-            temp = temp -> next;
-            
-            keyFound = true;
-        }
-    }
-    
-    if (temp == NULL) {
-        
-        cout << "Indicated SSN not found!" << endl;
-        
-        keyFound = false;
-        
-        cin.ignore();
-        
-        return *head;
-    }    
-    
-    prev -> next = temp -> next;
-        
-    delete temp;
-    
-    cout << "Deletion operation successful!" << endl;
-    
-    cout << "Person " << temp -> personSSN << " deleted." << endl;
-    
-    cout << "Updating database..." << endl;
-    
-    return *head;
-}
-
 // Switchboard for menu options 
 // Parameters: Bool, pointer to head of person struct
 // Returns: Bool
-bool menu_loop(bool quit, Person* head, Person* current) {
+bool menu_loop(bool quit, Person* head) {
     
     int choice = 0;
     
-    bool dontQuitMenu = true;
+    bool dontquitMenu = true;
     
-    cout << "Menu Options: " << endl; 
+    cout << "Please listen carefully, as our menu options have recently "
+         << "changed: " << endl; // :D
     cout << "1: " << endl;
-    cout << "2: Deletion Operation" << endl;
+    cout << "2: " << endl;
     cout << "3: " << endl;
     cout << "4: " << endl;
-    cout << "5: Edit Person Data" << endl;
-    cout << "6: Display all persons eligible for social security" << endl;
+    cout << "5: " << endl;
+    cout << "6: " << endl;
     cout << "7: " << endl;
     cout << "8: " << endl;
     cout << "9: " << endl;
@@ -334,7 +139,7 @@ bool menu_loop(bool quit, Person* head, Person* current) {
     cout << "11: " << endl;
     cout << "12: " << endl;
          
-    while (cin && dontQuitMenu == true) {
+    while (cin && dontquitMenu == true) {
         
         cout << "Enter option 1-12, or enter -1 to show menu again. "
             << "Enter anything else to exit." << endl;    
@@ -345,21 +150,21 @@ bool menu_loop(bool quit, Person* head, Person* current) {
         
             case -1:
 
-                cout << "Menu options: " << endl;
-                cout << "1: " << endl;
-                cout << "2: Deletion Operation" << endl;
-                cout << "3: " << endl;
-                cout << "4: " << endl;
-                cout << "5: Edit Person data" << endl;
-                cout << "6: Display all persons eligible for social security" << endl;
-                cout << "7: " << endl;
-                cout << "8: " << endl;
-                cout << "9: " << endl;
-                cout << "10: " << endl;
-                cout << "11: " << endl;
-                cout << "12: " << endl;
+            cout << "Menu options: " << endl;
+            cout << "1: " << endl;
+            cout << "2: " << endl;
+            cout << "3: " << endl;
+            cout << "4: " << endl;
+            cout << "5: " << endl;
+            cout << "6: " << endl;
+            cout << "7: " << endl;
+            cout << "8: " << endl;
+            cout << "9: " << endl;
+            cout << "10: " << endl;
+            cout << "11: " << endl;
+            cout << "12: " << endl;
             
-                break;
+            break;
             
             case 1:
             
@@ -371,14 +176,9 @@ bool menu_loop(bool quit, Person* head, Person* current) {
         
             case 2:
             
-                cout << "Option 2: Deletion Operation" << endl;
-                
-                
-                print_PersonNodes(head, current);
-                
-                head = delete_Person(&head);
-                
-                print_PersonNodes(head, current);
+                cout << "Option 2" << endl;
+            
+                head = option_two(head);
             
                 break;
         
@@ -402,19 +202,15 @@ bool menu_loop(bool quit, Person* head, Person* current) {
             
                 cout << "Option 5" << endl;
             
-                print_PersonNodes(head, current);
-                
-                edit_PersonData(head); 
-                
-                print_PersonNodes(head, current);
+                head = option_five(head); 
             
                 break;
         
             case 6:
             
-                cout << "Display all persons eligible for social security" << endl;
+                cout << "Option 6" << endl;
             
-                display_Eligibility(head);
+                head = option_six(head);
             
                 break;
         
@@ -468,77 +264,15 @@ bool menu_loop(bool quit, Person* head, Person* current) {
 
             default:
             
-                cout << "Terminating." << endl;
+                cout << "Terminating" << endl;
             
-                return dontQuitMenu;
+                return dontquitMenu;
         }
     
     }
-    return dontQuitMenu;
+    return dontquitMenu;
 }    
 
-
-// Populate persons from file and return person count
-// Parameters: String, Person*, Person*, Person*
-// Returns: Void
-void populate_Person(string fileName, Person* current, Person* newPerson,
-                     Person* head) {
-    
-    ifstream dataFile;
-    dataFile.open(fileName);
-    
-    string currentLine;
-    
-    while (!dataFile.eof()) {  
-        
-        getline(dataFile, currentLine);
-        current -> personName = currentLine;
-        
-        getline(dataFile, currentLine);
-        current -> personSSN = stol(currentLine); 
-        
-        getline(dataFile, currentLine);
-        current -> personGender = currentLine[0]; 
-        
-        getline(dataFile, currentLine);
-        current -> personDOB = currentLine; 
-
-        getline(dataFile, currentLine);
-        current -> personHeight = stof(currentLine);
-        
-        getline(dataFile, currentLine);
-        current -> personWeight = stof(currentLine);
-        
-        getline(dataFile, currentLine);
-        current -> fatherSSN = stol(currentLine);
-        
-        getline(dataFile, currentLine);
-        current -> motherSSN = stol(currentLine);            
-        
-        newPerson = new Person;         
-        current -> next = newPerson;    
-        current = newPerson;
-    }
-    
-    dataFile.close();
-    
-    current = head;
-    
-    Person* prevPerson;
-    
-    while (current -> next != NULL) {    
-        
-        prevPerson = current;
-        
-        current = current -> next;
-    }
-    
-    prevPerson -> next = NULL;
-    
-    delete newPerson;
-    
-    current = head;
-}
 
 // Option 1
 // Parameters: Pointer to head of person struct
@@ -550,16 +284,15 @@ Person* option_one(Person* head) {
     return head;
 }
 
-/*
 // Option 2
 // Parameters: Pointer to head of person struct
 // Returns: Pointer to head of person struct
 Person* option_two(Person* head) {
     
     cout << "Fnct 2" << endl;
+    
     return head;
 }
-*/
 
 // Option 3
 // Parameters: Pointer to head of person struct
