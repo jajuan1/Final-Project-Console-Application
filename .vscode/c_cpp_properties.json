@@ -3,10 +3,7 @@
         {
             "name": "Win32",
             "includePath": [
-                "${workspaceFolder}/**",
-                "#include \"ifstream\"",
-                "#include \"ofstream\"",
-                "#include \"string\""
+                "${workspaceFolder}/**"
             ],
             "defines": [
                 "_DEBUG",
